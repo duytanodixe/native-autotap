@@ -1,14 +1,11 @@
 package com.example.autotapnative
 
 import android.app.Service
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.graphics.PixelFormat
 import android.os.Build
 import android.os.IBinder
-import android.provider.Settings
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -20,24 +17,8 @@ import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
-import org.json.JSONArray
 
 class OverlayService : Service() {
-
-    companion object {
-        private const val ACTION_REFRESH_ALL = "com.example.autotapnative.REFRESH_ALL"
-
-        fun newRefreshIntent(context: Context): Intent =
-            Intent(ACTION_REFRESH_ALL).setPackage(context.packageName)
-
-        fun canDrawOverlays(context: Context): Boolean {
-            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                Settings.canDrawOverlays(context)
-            } else {
-                true
-            }
-        }
-    }
 
     private lateinit var windowManager: WindowManager
     private var toolbarView: View? = null
@@ -49,47 +30,23 @@ class OverlayService : Service() {
 
     private var isRunning = false
 
-    private val refreshReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent?.action == ACTION_REFRESH_ALL) {
-                loadAndSetupProfiles()
-                (toolbarView?.findViewById<Spinner>(R.id.spinnerProfiles))?.let {
-                    updateProfileSpinner(it)
-                }
-                reloadDotsUI()
-            }
-        }
-    }
-
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
         super.onCreate()
         windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
-
         loadAndSetupProfiles()
         createToolbar()
         reloadDotsUI()
-
-        val filter = IntentFilter(ACTION_REFRESH_ALL)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(refreshReceiver, filter, RECEIVER_NOT_EXPORTED)
-        } else {
-            @Suppress("UnspecifiedRegisterReceiverFlag")
-            registerReceiver(refreshReceiver, filter)
-        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        try {
-            unregisterReceiver(refreshReceiver)
-        } catch (_: Exception) {
+        if (isRunning) {
+            AutoTapAccessibilityService.instance?.stopAutoTap()
         }
-
         toolbarView?.let { windowManager.removeView(it) }
         toolbarView = null
-
         removeAllDotViews()
     }
 
@@ -97,6 +54,7 @@ class OverlayService : Service() {
         allProfiles = ProfileManager.loadProfiles(this)
         if (allProfiles.isEmpty()) {
             allProfiles.add(Profile("Default", mutableListOf()))
+            ProfileManager.saveProfiles(this, allProfiles)
         }
 
         val activeProfileName = ProfileManager.getActiveProfileName(this)
@@ -118,11 +76,8 @@ class OverlayService : Service() {
         }
 
         val params = WindowManager.LayoutParams(
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            layoutType,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-            PixelFormat.TRANSLUCENT
+            WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT,
+            layoutType, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT
         )
         params.gravity = Gravity.TOP or Gravity.START
         params.x = 100
@@ -164,8 +119,9 @@ class OverlayService : Service() {
 
         spinnerProfiles.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedProfileName = allProfiles[position].name
+                val selectedProfileName = allProfiles.getOrNull(position)?.name ?: return
                 if (activeProfile?.name != selectedProfileName) {
+                    if (isRunning) { toggleAutoTap(btnPlayPause) }
                     activeProfile = allProfiles[position]
                     ProfileManager.setActiveProfileName(this@OverlayService, selectedProfileName)
                     reloadDotsUI()
@@ -174,22 +130,10 @@ class OverlayService : Service() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        btnPlayPause.setOnClickListener {
-            toggleAutoTap(it as ImageButton)
-        }
-
-        btnAddDot.setOnClickListener {
-            addDot()
-        }
-
-        btnRemoveDot.setOnClickListener {
-            removeDot()
-        }
-
-        btnSaveProfile.setOnClickListener {
-            ProfileManager.saveProfiles(this, allProfiles)
-            Toast.makeText(this, "Đã lưu tất cả profile!", Toast.LENGTH_SHORT).show()
-        }
+        btnPlayPause.setOnClickListener { toggleAutoTap(it as ImageButton) }
+        btnAddDot.setOnClickListener { addDot() }
+        btnRemoveDot.setOnClickListener { removeDot() }
+        btnSaveProfile.setOnClickListener { saveAllProfiles() }
 
         windowManager.addView(view, params)
     }
@@ -201,14 +145,13 @@ class OverlayService : Service() {
         spinner.adapter = adapter
         val activeProfileIndex = allProfiles.indexOfFirst { it.name == activeProfile?.name }
         if (activeProfileIndex != -1) {
-            spinner.setSelection(activeProfileIndex)
+            spinner.setSelection(activeProfileIndex, false)
         }
     }
 
     private fun reloadDotsUI() {
         removeAllDotViews()
         activeProfile?.dots?.forEachIndexed { index, dot -> createDotView(dot, index + 1) }
-        sendDotsToAccessibilityService()
     }
 
     private fun removeAllDotViews() {
@@ -229,18 +172,14 @@ class OverlayService : Service() {
         }
 
         val params = WindowManager.LayoutParams(
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            layoutType,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-            PixelFormat.TRANSLUCENT
+            WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT,
+            layoutType, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT
         )
         params.gravity = Gravity.TOP or Gravity.START
         params.x = dot.x.toInt()
         params.y = dot.y.toInt()
 
-        val tvId = view.findViewById<TextView>(R.id.tvDotId)
-        tvId.text = displayId.toString()
+        view.findViewById<TextView>(R.id.tvDotId).text = displayId.toString()
 
         view.setOnTouchListener(object : View.OnTouchListener {
             private var initialX = 0
@@ -265,7 +204,10 @@ class OverlayService : Service() {
                         dot.y = params.y.toFloat()
                         return true
                     }
-                    MotionEvent.ACTION_UP -> { return true }
+                    MotionEvent.ACTION_UP -> {
+                        saveAllProfiles()
+                        return true
+                    }
                 }
                 return false
             }
@@ -274,7 +216,7 @@ class OverlayService : Service() {
         view.findViewById<ImageButton>(R.id.btnDotSettings).setOnClickListener {
             val intent = Intent(this, DotSettingsActivity::class.java).apply {
                 putExtra(DotSettingsActivity.EXTRA_DOT_ID, dot.id)
-                putExtra("extra_profile_name", activeProfile?.name)
+                putExtra(DotSettingsActivity.EXTRA_PROFILE_NAME, activeProfile?.name)
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
             startActivity(intent)
@@ -284,56 +226,32 @@ class OverlayService : Service() {
     }
 
     private fun toggleAutoTap(button: ImageButton) {
+        if (AutoTapAccessibilityService.instance == null) {
+            Toast.makeText(this, "Dịch vụ trợ năng chưa sẵn sàng. Hãy thử lại.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         isRunning = !isRunning
-        sendDotsToAccessibilityService()
 
         if (isRunning) {
             button.setImageResource(android.R.drawable.ic_media_pause)
-            sendBroadcast(Intent(AutoTapAccessibilityService.ACTION_START).setPackage(packageName))
+            val dotsToTap = activeProfile?.dots ?: emptyList()
+            AutoTapAccessibilityService.instance?.startAutoTap(dotsToTap)
             Toast.makeText(this, "Bắt đầu profile: ${activeProfile?.name}", Toast.LENGTH_SHORT).show()
         } else {
             button.setImageResource(android.R.drawable.ic_media_play)
-            sendBroadcast(Intent(AutoTapAccessibilityService.ACTION_STOP).setPackage(packageName))
+            AutoTapAccessibilityService.instance?.stopAutoTap()
             Toast.makeText(this, "Dừng auto-tap", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun sendDotsToAccessibilityService() {
-        val dotsToSend = activeProfile?.dots ?: return
-        val arr = JSONArray()
-        for (d in dotsToSend) {
-            val obj = org.json.JSONObject()
-            obj.put("id", d.id)
-            obj.put("actionIntervalTime", d.actionIntervalTime)
-            obj.put("holdTime", d.holdTime)
-            obj.put("antiDetection", d.antiDetection.toDouble())
-            obj.put("startDelay", d.startDelay)
-            obj.put("x", d.x.toDouble())
-            obj.put("y", d.y.toDouble())
-            arr.put(obj)
-        }
-
-        val intent = Intent(AutoTapAccessibilityService.ACTION_SET_DOTS).apply {
-            setPackage(packageName)
-            putExtra(AutoTapAccessibilityService.EXTRA_DOTS, arr.toString())
-        }
-        sendBroadcast(intent)
-    }
-
     private fun addDot() {
         val currentProfile = activeProfile ?: return
-        val id = (System.currentTimeMillis() % 100000).toString() // More unique ID
-        val newDot = Dot(
-            id = id,
-            actionIntervalTime = 1000,
-            holdTime = 200,
-            antiDetection = 0f,
-            startDelay = 0,
-            x = 500f,
-            y = 500f
-        )
+        val id = System.currentTimeMillis().toString()
+        val newDot = Dot(id = id, actionIntervalTime = 1000, holdTime = 100, antiDetection = 0f, startDelay = 0, x = 300f, y = 300f)
         currentProfile.dots.add(newDot)
         createDotView(newDot, currentProfile.dots.size)
+        saveAllProfiles()
     }
 
     private fun removeDot() {
@@ -341,6 +259,11 @@ class OverlayService : Service() {
         if (currentProfile.dots.isNotEmpty()) {
             val dotToRemove = currentProfile.dots.removeLast()
             dotViews.remove(dotToRemove.id)?.let { windowManager.removeView(it) }
+            saveAllProfiles()
         }
+    }
+
+    private fun saveAllProfiles() {
+        ProfileManager.saveProfiles(this, allProfiles)
     }
 }

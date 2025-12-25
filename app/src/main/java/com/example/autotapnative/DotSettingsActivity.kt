@@ -1,5 +1,6 @@
 package com.example.autotapnative
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -7,6 +8,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class DotSettingsActivity : AppCompatActivity() {
+
+    companion object {
+        const val EXTRA_DOT_ID = "extra_dot_id"
+        const val EXTRA_PROFILE_NAME = "extra_profile_name"
+        private const val ACTION_REFRESH_ALL = "com.example.autotapnative.REFRESH_ALL"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +58,9 @@ class DotSettingsActivity : AppCompatActivity() {
 
                 ProfileManager.saveProfiles(this, allProfiles)
 
-                sendBroadcast(OverlayService.newRefreshIntent(this))
+                // Manually create the intent to break the compile-time dependency
+                val refreshIntent = Intent(ACTION_REFRESH_ALL).setPackage(packageName)
+                sendBroadcast(refreshIntent)
 
                 Toast.makeText(this, "Đã lưu cài đặt cho dot ${dot.id}", Toast.LENGTH_SHORT).show()
                 finish()
@@ -59,10 +68,5 @@ class DotSettingsActivity : AppCompatActivity() {
                 Toast.makeText(this, "Giá trị không hợp lệ", Toast.LENGTH_SHORT).show()
             }
         }
-    }
-
-    companion object {
-        const val EXTRA_DOT_ID = "extra_dot_id"
-        const val EXTRA_PROFILE_NAME = "extra_profile_name"
     }
 }

@@ -34,7 +34,7 @@ object ProfileManager {
                 profilesArray.put(profileObject)
             }
             prefs.putString(KEY_PROFILES, profilesArray.toString())
-            prefs.apply()
+            prefs.commit() // Use commit for synchronous save
         } catch (e: Exception) {
             Log.e("ProfileManager", "Error saving profiles", e)
         }
@@ -71,7 +71,7 @@ object ProfileManager {
                 }
             } catch (e: Exception) {
                 Log.e("ProfileManager", "Error loading profiles, clearing old data", e)
-                prefs.edit().clear().apply()
+                prefs.edit().clear().commit() // Use commit for synchronous save
             }
         }
         return profiles
@@ -80,7 +80,7 @@ object ProfileManager {
     fun setActiveProfileName(context: Context, name: String) {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit()
         prefs.putString(KEY_ACTIVE_PROFILE, name)
-        prefs.apply()
+        prefs.commit() // Use commit for synchronous save
     }
 
     fun getActiveProfileName(context: Context): String? {

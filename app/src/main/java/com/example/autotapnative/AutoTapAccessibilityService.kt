@@ -2,16 +2,9 @@ package com.example.autotapnative
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.GestureDescription
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.graphics.Path
-import android.os.Build
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
-import org.json.JSONArray
-import org.json.JSONObject
 import java.util.Timer
 import java.util.TimerTask
 import kotlin.math.cos
@@ -22,93 +15,38 @@ import kotlin.random.Random
 class AutoTapAccessibilityService : AccessibilityService() {
 
     companion object {
-        const val ACTION_SET_DOTS = "com.example.autotapnative.SET_DOTS"
-        const val ACTION_START = "com.example.autotapnative.START"
-        const val ACTION_STOP = "com.example.autotapnative.STOP"
-        const val EXTRA_DOTS = "dots_json"
+        var instance: AutoTapAccessibilityService? = null
     }
 
     private val timers = mutableMapOf<String, Timer>()
-    private val dots = mutableListOf<Dot>()
-
-    private val controlReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            when (intent?.action) {
-                ACTION_SET_DOTS -> {
-                    val json = intent.getStringExtra(EXTRA_DOTS)
-                    if (json != null) {
-                        setDotsFromJson(json)
-                    }
-                }
-                ACTION_START -> startAutoTap()
-                ACTION_STOP -> stopAutoTap()
-            }
-        }
-    }
 
     override fun onServiceConnected() {
         super.onServiceConnected()
-        Log.d("AutoTapService", "Service connected")
-        val filter = IntentFilter().apply {
-            addAction(ACTION_SET_DOTS)
-            addAction(ACTION_START)
-            addAction(ACTION_STOP)
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(controlReceiver, filter, RECEIVER_EXPORTED)
-        } else {
-            @Suppress("UnspecifiedRegisterReceiverFlag")
-            registerReceiver(controlReceiver, filter)
-        }
+        instance = this
+        Log.d("AutoTapService", "Service connected and instance set.")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        try {
-            unregisterReceiver(controlReceiver)
-        } catch (_: Exception) {
-        }
         stopAutoTap()
+        instance = null
+        Log.d("AutoTapService", "Service destroyed and instance cleared.")
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {}
 
-    override fun onInterrupt() {}
-
-    private fun setDotsFromJson(json: String) {
-        try {
-            val arr = JSONArray(json)
-            val newDots = mutableListOf<Dot>()
-            for (i in 0 until arr.length()) {
-                val obj = arr.getJSONObject(i)
-                newDots.add(
-                    Dot(
-                        id = obj.getString("id"),
-                        actionIntervalTime = obj.getLong("actionIntervalTime"),
-                        holdTime = obj.getLong("holdTime"),
-                        antiDetection = obj.getDouble("antiDetection").toFloat(),
-                        startDelay = obj.getLong("startDelay"),
-                        x = obj.getDouble("x").toFloat(),
-                        y = obj.getDouble("y").toFloat()
-                    )
-                )
-            }
-            setDots(newDots)
-        } catch (e: Exception) {
-            Log.e("AutoTapService", "Failed to parse dots json", e)
-        }
+    override fun onInterrupt() {
+        stopAutoTap()
     }
 
-    private fun setDots(newDots: List<Dot>) {
-        stopAutoTap()
-        dots.clear()
-        dots.addAll(newDots)
-        Log.d("AutoTapService", "Dots updated: ${dots.size}")
-    }
-
-    private fun startAutoTap() {
-        stopAutoTap()
+    fun startAutoTap(dots: List<Dot>) {
+        stopAutoTap() 
         Log.d("AutoTapService", "Starting auto-tap for ${dots.size} dots.")
+
+        if (dots.isEmpty()) {
+            Log.w("AutoTapService", "Dot list is empty. Nothing to tap.")
+            return
+        }
 
         for (dot in dots) {
             if (dot.actionIntervalTime <= 0) {
@@ -125,7 +63,8 @@ class AutoTapAccessibilityService : AccessibilityService() {
         }
     }
 
-    private fun stopAutoTap() {
+    fun stopAutoTap() {
+        if (timers.isEmpty()) return
         timers.values.forEach { it.cancel() }
         timers.clear()
         Log.d("AutoTapService", "Stopped auto-tap.")
