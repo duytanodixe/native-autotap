@@ -1,0 +1,24 @@
+R_DEF: Internal format may change without notice
+local
+drawable bg_toolbar
+id btnAccessibilitySetting
+id btnAddDot
+id btnDotSettings
+id btnOverlayPermission
+id btnPlayPause
+id btnSaveDot
+id btnStartOverlay
+id etAntiDetection
+id etHold
+id etInterval
+id etStartDelay
+id tvDotId
+id tvInfo
+id viewCrosshair
+layout activity_dot_settings
+layout activity_main
+layout view_dot
+layout view_toolbar
+string app_name
+style Theme.AutoTapNative
+xml autotap_service_config
