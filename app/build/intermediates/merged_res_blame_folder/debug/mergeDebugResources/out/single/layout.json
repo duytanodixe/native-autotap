@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "com.example.autotapnative.app-mergeDebugResources-30:/layout/view_toolbar.xml",
+        "source": "com.example.autotapnative.app-main-33:/layout/view_toolbar.xml"
+    },
+    {
+        "merged": "com.example.autotapnative.app-mergeDebugResources-30:/layout/activity_dot_settings.xml",
+        "source": "com.example.autotapnative.app-main-33:/layout/activity_dot_settings.xml"
+    },
+    {
+        "merged": "com.example.autotapnative.app-mergeDebugResources-30:/layout/view_dot.xml",
+        "source": "com.example.autotapnative.app-main-33:/layout/view_dot.xml"
+    },
+    {
+        "merged": "com.example.autotapnative.app-mergeDebugResources-30:/layout/activity_main.xml",
+        "source": "com.example.autotapnative.app-main-33:/layout/activity_main.xml"
+    }
+]
