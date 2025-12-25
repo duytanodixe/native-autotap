@@ -55,7 +55,7 @@ class AutoTapAccessibilityService : AccessibilityService() {
             addAction(ACTION_STOP)
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(controlReceiver, filter, RECEIVER_NOT_EXPORTED)
+            registerReceiver(controlReceiver, filter, RECEIVER_EXPORTED)
         } else {
             @Suppress("UnspecifiedRegisterReceiverFlag")
             registerReceiver(controlReceiver, filter)
@@ -71,13 +71,9 @@ class AutoTapAccessibilityService : AccessibilityService() {
         stopAutoTap()
     }
 
-    override fun onAccessibilityEvent(event: AccessibilityEvent?) {
-        // Không cần xử lý event; chỉ dùng để dispatch gesture
-    }
+    override fun onAccessibilityEvent(event: AccessibilityEvent?) {}
 
-    override fun onInterrupt() {
-        // Không cần xử lý
-    }
+    override fun onInterrupt() {}
 
     private fun setDotsFromJson(json: String) {
         try {
@@ -112,28 +108,27 @@ class AutoTapAccessibilityService : AccessibilityService() {
 
     private fun startAutoTap() {
         stopAutoTap()
-        Log.d("AutoTapService", "startAutoTap, dots=${dots.size}")
+        Log.d("AutoTapService", "Starting auto-tap for ${dots.size} dots.")
 
         for (dot in dots) {
-            val startTimer = Timer()
-            startTimer.schedule(object : TimerTask() {
+            if (dot.actionIntervalTime <= 0) {
+                Log.w("AutoTapService", "Skipping dot ${dot.id} due to invalid interval: ${dot.actionIntervalTime}")
+                continue
+            }
+            val timer = Timer()
+            timers[dot.id] = timer
+            timer.schedule(object : TimerTask() {
                 override fun run() {
-                    val timer = Timer()
-                    timers[dot.id] = timer
-                    timer.schedule(object : TimerTask() {
-                        override fun run() {
-                            performAutoTap(dot)
-                        }
-                    }, 0L, dot.actionIntervalTime)
+                    performAutoTap(dot)
                 }
-            }, dot.startDelay)
+            }, dot.startDelay, dot.actionIntervalTime)
         }
     }
 
     private fun stopAutoTap() {
         timers.values.forEach { it.cancel() }
         timers.clear()
-        Log.d("AutoTapService", "stopAutoTap")
+        Log.d("AutoTapService", "Stopped auto-tap.")
     }
 
     private fun performAutoTap(dot: Dot) {
@@ -151,7 +146,7 @@ class AutoTapAccessibilityService : AccessibilityService() {
         val x = dot.x + jitterX.toFloat()
         val y = dot.y + jitterY.toFloat()
 
-        Log.d("AutoTapService", "Tap at ($x, $y) for ${dot.holdTime}ms")
+        Log.d("AutoTapService", "Tapping at ($x, $y) for dot ${dot.id}")
 
         val path = Path().apply {
             moveTo(x, y)
@@ -168,24 +163,5 @@ class AutoTapAccessibilityService : AccessibilityService() {
             .build()
 
         dispatchGesture(gesture, null, null)
-    }
-
-    /**
-     * Helper static để build JSON giống DotCubit dễ map nếu sau này muốn gửi từ nơi khác.
-     */
-    fun List<Dot>.toJsonArray(): JSONArray {
-        val arr = JSONArray()
-        for (d in this) {
-            val obj = JSONObject()
-            obj.put("id", d.id)
-            obj.put("actionIntervalTime", d.actionIntervalTime)
-            obj.put("holdTime", d.holdTime)
-            obj.put("antiDetection", d.antiDetection.toDouble())
-            obj.put("startDelay", d.startDelay)
-            obj.put("x", d.x.toDouble())
-            obj.put("y", d.y.toDouble())
-            arr.put(obj)
-        }
-        return arr
     }
 }

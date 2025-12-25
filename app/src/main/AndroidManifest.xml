@@ -20,15 +20,10 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".DotSettingsActivity"
-            android:exported="false"
-            android:theme="@style/Theme.AutoTapNative" />
-
         <service
             android:name=".AutoTapAccessibilityService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>

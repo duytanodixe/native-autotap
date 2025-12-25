@@ -1,19 +1,11 @@
 [
     {
-        "merged": "com.example.autotapnative.app-debug-31:/layout_view_dot.xml.flat",
-        "source": "com.example.autotapnative.app-main-33:/layout/view_dot.xml"
-    },
-    {
         "merged": "com.example.autotapnative.app-debug-31:/layout_view_toolbar.xml.flat",
         "source": "com.example.autotapnative.app-main-33:/layout/view_toolbar.xml"
     },
     {
         "merged": "C:\\Users\\duyta\\.gradle\\daemon\\9.0-milestone-1\\com.example.autotapnative.app-debug-31:\\layout_activity_dot_settings.xml.flat",
         "source": "C:\\Users\\duyta\\.gradle\\daemon\\9.0-milestone-1\\com.example.autotapnative.app-main-33:\\layout\\activity_dot_settings.xml"
-    },
-    {
-        "merged": "com.example.autotapnative.app-debug-31:/drawable_bg_toolbar.xml.flat",
-        "source": "com.example.autotapnative.app-main-33:/drawable/bg_toolbar.xml"
     },
     {
         "merged": "C:\\Users\\duyta\\.gradle\\daemon\\9.0-milestone-1\\com.example.autotapnative.app-debug-31:\\layout_view_toolbar.xml.flat",
@@ -28,11 +20,11 @@
         "source": "C:\\Users\\duyta\\.gradle\\daemon\\9.0-milestone-1\\com.example.autotapnative.app-main-33:\\drawable\\bg_toolbar.xml"
     },
     {
-        "merged": "C:\\Users\\duyta\\.gradle\\daemon\\9.0-milestone-1\\com.example.autotapnative.app-debug-31:\\layout_activity_main.xml.flat",
-        "source": "C:\\Users\\duyta\\.gradle\\daemon\\9.0-milestone-1\\com.example.autotapnative.app-main-33:\\layout\\activity_main.xml"
-    },
-    {
         "merged": "C:\\Users\\duyta\\.gradle\\daemon\\9.0-milestone-1\\com.example.autotapnative.app-debug-31:\\layout_view_dot.xml.flat",
         "source": "C:\\Users\\duyta\\.gradle\\daemon\\9.0-milestone-1\\com.example.autotapnative.app-main-33:\\layout\\view_dot.xml"
+    },
+    {
+        "merged": "C:\\Users\\duyta\\.gradle\\daemon\\9.0-milestone-1\\com.example.autotapnative.app-debug-31:\\layout_activity_main.xml.flat",
+        "source": "C:\\Users\\duyta\\.gradle\\daemon\\9.0-milestone-1\\com.example.autotapnative.app-main-33:\\layout\\activity_main.xml"
     }
 ]

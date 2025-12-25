@@ -13,16 +13,20 @@ class DotSettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dot_settings)
 
         val dotId = intent.getStringExtra(EXTRA_DOT_ID)
-        if (dotId == null) {
-            Toast.makeText(this, "Không tìm thấy dot", Toast.LENGTH_SHORT).show()
+        val profileName = intent.getStringExtra(EXTRA_PROFILE_NAME)
+
+        if (dotId == null || profileName == null) {
+            Toast.makeText(this, "Lỗi: Thiếu thông tin Dot hoặc Profile", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
 
-        val dots = DotStorage.loadDots(this)
-        val dot = dots.find { it.id == dotId }
+        val allProfiles = ProfileManager.loadProfiles(this)
+        val profile = allProfiles.find { it.name == profileName }
+        val dot = profile?.dots?.find { it.id == dotId }
+
         if (dot == null) {
-            Toast.makeText(this, "Dot không tồn tại", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Dot hoặc Profile không tồn tại", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
@@ -35,27 +39,21 @@ class DotSettingsActivity : AppCompatActivity() {
 
         etInterval.setText(dot.actionIntervalTime.toString())
         etHold.setText(dot.holdTime.toString())
-        etAnti.setText(dot.antiDetection.toInt().toString())
+        etAnti.setText(dot.antiDetection.toString())
         etDelay.setText(dot.startDelay.toString())
 
         btnSave.setOnClickListener {
             try {
-                val interval = etInterval.text.toString().toLong()
-                val hold = etHold.text.toString().toLong()
-                val anti = etAnti.text.toString().toFloat()
-                val delay = etDelay.text.toString().toLong()
+                dot.actionIntervalTime = etInterval.text.toString().toLong()
+                dot.holdTime = etHold.text.toString().toLong()
+                dot.antiDetection = etAnti.text.toString().toFloat()
+                dot.startDelay = etDelay.text.toString().toLong()
 
-                dot.actionIntervalTime = interval
-                dot.holdTime = hold
-                dot.antiDetection = anti
-                dot.startDelay = delay
+                ProfileManager.saveProfiles(this, allProfiles)
 
-                DotStorage.saveDots(this, dots)
-
-                // Yêu cầu OverlayService reload dots & cập nhật autotap
                 sendBroadcast(OverlayService.newRefreshIntent(this))
 
-                Toast.makeText(this, "Đã lưu dot", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Đã lưu cài đặt cho dot ${dot.id}", Toast.LENGTH_SHORT).show()
                 finish()
             } catch (e: Exception) {
                 Toast.makeText(this, "Giá trị không hợp lệ", Toast.LENGTH_SHORT).show()
@@ -65,5 +63,6 @@ class DotSettingsActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_DOT_ID = "extra_dot_id"
+        const val EXTRA_PROFILE_NAME = "extra_profile_name"
     }
 }

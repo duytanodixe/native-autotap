@@ -6,12 +6,15 @@ id btnAddDot
 id btnDotSettings
 id btnOverlayPermission
 id btnPlayPause
+id btnRemoveDot
 id btnSaveDot
+id btnSaveProfile
 id btnStartOverlay
 id etAntiDetection
 id etHold
 id etInterval
 id etStartDelay
+id spinnerProfiles
 id tvDotId
 id tvInfo
 id viewCrosshair
