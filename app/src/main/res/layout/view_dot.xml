@@ -28,9 +28,6 @@
         android:layout_gravity="top|end"
         android:layout_margin="-4dp"
         android:background="@android:color/transparent"
-        android:src="@android:drawable/ic_menu_manage"
-        android:tint="@android:color/white" />
+        android:src="@android:drawable/ic_menu_manage" />
 
 </FrameLayout>
-
-

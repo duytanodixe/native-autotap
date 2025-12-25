@@ -7,6 +7,16 @@ android {
     namespace = "com.example.autotapnative"
     compileSdk = 34
 
+    buildFeatures {
+        viewBinding = true
+    }
+
+    sourceSets {
+        getByName("main") {
+            java.srcDirs("src/main/java")
+        }
+    }
+
     defaultConfig {
         applicationId = "com.example.autotapnative"
         minSdk = 26
@@ -57,4 +67,3 @@ configurations.all {
         isCanBeConsumed = false
     }
 }
-

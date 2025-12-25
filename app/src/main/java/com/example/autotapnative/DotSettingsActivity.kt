@@ -1,4 +1,4 @@
-package com.example.autotap
+package com.example.autotapnative
 
 import android.os.Bundle
 import android.widget.Button
@@ -67,5 +67,3 @@ class DotSettingsActivity : AppCompatActivity() {
         const val EXTRA_DOT_ID = "extra_dot_id"
     }
 }
-
-

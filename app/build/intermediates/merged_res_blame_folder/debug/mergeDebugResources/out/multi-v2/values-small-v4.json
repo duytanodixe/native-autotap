@@ -4,7 +4,7 @@
             "outputFile": "com.example.autotapnative.app-mergeDebugResources-29:/values-small-v4/values-small-v4.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\duyta\\.gradle\\caches\\9.0-milestone-1\\transforms\\10ac23ffc5880e5cb9cb5586f3ccecd1\\transformed\\material-1.11.0\\res\\values-small-v4\\values-small-v4.xml",
+                    "source": "C:\\Users\\duyta\\.gradle\\caches\\9.0-milestone-1\\transforms\\8b369e50ea02ce86b7d468f841d3f625\\transformed\\material-1.11.0\\res\\values-small-v4\\values-small-v4.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",

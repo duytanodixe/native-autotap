@@ -1,4 +1,4 @@
-package com.example.autotap
+package com.example.autotapnative
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.GestureDescription
@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Path
+import android.os.Build
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import org.json.JSONArray
@@ -53,7 +54,12 @@ class AutoTapAccessibilityService : AccessibilityService() {
             addAction(ACTION_START)
             addAction(ACTION_STOP)
         }
-        registerReceiver(controlReceiver, filter)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(controlReceiver, filter, RECEIVER_NOT_EXPORTED)
+        } else {
+            @Suppress("UnspecifiedRegisterReceiverFlag")
+            registerReceiver(controlReceiver, filter)
+        }
     }
 
     override fun onDestroy() {
@@ -183,5 +189,3 @@ class AutoTapAccessibilityService : AccessibilityService() {
         return arr
     }
 }
-
-

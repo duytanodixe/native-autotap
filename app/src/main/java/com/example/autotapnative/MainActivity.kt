@@ -1,62 +1,55 @@
-package com.example.autotap
+package com.example.autotapnative
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.widget.Button
-import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
+import com.example.autotapnative.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    private lateinit var binding: ActivityMainBinding
 
-        val tvInfo = findViewById<TextView>(R.id.tvInfo)
-        val btnOverlay = findViewById<Button>(R.id.btnOverlayPermission)
-        val btnStartOverlay = findViewById<Button>(R.id.btnStartOverlay)
-        val btnAccessibility = findViewById<Button>(R.id.btnAccessibilitySetting)
-
-        tvInfo.text = """
-            1. Cấp quyền vẽ nổi (overlay).
-            2. Mở màn hình trợ năng và bật AutoTapNative.
-            3. Nhấn Start Overlay để hiện toolbar nổi.
-            4. Dùng toolbar để Add Dot và Start/Stop autotap.
-        """.trimIndent()
-
-        btnOverlay.setOnClickListener {
-            requestOverlayPermission()
-        }
-
-        btnStartOverlay.setOnClickListener {
-            if (OverlayService.canDrawOverlays(this)) {
-                val intent = Intent(this, OverlayService::class.java)
-                startService(intent)
-            } else {
-                requestOverlayPermission()
-            }
-        }
-
-        btnAccessibility.setOnClickListener {
-            val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-            startActivity(intent)
+    private val overlayPermissionLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        // After returning from the settings screen, check for the permission again.
+        if (Settings.canDrawOverlays(this)) {
+            Toast.makeText(this, "Quyền Overlay đã được cấp", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "Bạn chưa cấp quyền Overlay", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun requestOverlayPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.btnAccessibilitySetting.setOnClickListener {
+            val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+            startActivity(intent)
+        }
+
+        binding.btnOverlayPermission.setOnClickListener {
             if (!Settings.canDrawOverlays(this)) {
-                val intent = Intent(
-                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                    Uri.parse("package:$packageName")
-                )
-                startActivity(intent)
+                val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    "package:$packageName".toUri())
+                overlayPermissionLauncher.launch(intent)
+            } else {
+                Toast.makeText(this, "Quyền Overlay đã được cấp từ trước", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        binding.btnStartOverlay.setOnClickListener {
+            if (Settings.canDrawOverlays(this)) {
+                val serviceIntent = Intent(this, OverlayService::class.java)
+                startService(serviceIntent)
+            } else {
+                Toast.makeText(this, "Cần cấp quyền Overlay để bắt đầu", Toast.LENGTH_SHORT).show()
             }
         }
     }
 }
-
-

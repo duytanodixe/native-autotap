@@ -8,9 +8,9 @@
     <TextView
         android:id="@+id/tvInfo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:paddingBottom="16dp" />
+    android:layout_height="wrap_content"
+        android:paddingBottom="16dp"
+        android:textSize="16sp" />
 
     <Button
         android:id="@+id/btnOverlayPermission"
@@ -22,16 +22,14 @@
         android:id="@+id/btnAccessibilitySetting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Mở cài đặt Trợ năng"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="8dp"
+        android:text="Mở cài đặt Trợ năng" />
 
     <Button
         android:id="@+id/btnStartOverlay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Start Overlay Toolbar"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp"
+        android:text="Start Overlay Toolbar" />
 
 </LinearLayout>
-
-

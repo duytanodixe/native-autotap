@@ -1,4 +1,4 @@
-package com.example.autotap
+package com.example.autotapnative
 
 import android.app.Service
 import android.content.BroadcastReceiver
@@ -306,5 +306,3 @@ class OverlayService : Service() {
         sendDots()
     }
 }
-
-
