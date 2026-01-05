@@ -2880,6 +2880,9 @@ int drawable abc_textfield_search_material 0x7f070075
 int drawable abc_vector_test 0x7f070076
 int drawable avd_hide_password 0x7f070077
 int drawable avd_show_password 0x7f070078
+int drawable bg_card_blue 0x7f0700e4
+int drawable bg_card_red 0x7f0700e5
+int drawable bg_circle_start 0x7f0700e6
 int drawable bg_toolbar 0x7f070079
 int drawable btn_checkbox_checked_mtrl 0x7f07007a
 int drawable btn_checkbox_checked_to_unchecked_mtrl_animation 0x7f07007b
@@ -3077,10 +3080,13 @@ int id bottom 0x7f080056
 int id bounce 0x7f080057
 int id btnAccessibilitySetting 0x7f080058
 int id btnAddDot 0x7f080059
+int id btnCancel 0x7f0801d2
+int id btnChooseProfile 0x7f0801d3
 int id btnDotSettings 0x7f08005a
 int id btnOverlayPermission 0x7f08005b
 int id btnPlayPause 0x7f08005c
 int id btnRemoveDot 0x7f08005d
+int id btnSave 0x7f0801d4
 int id btnSaveDot 0x7f08005e
 int id btnSaveProfile 0x7f08005f
 int id btnStartOverlay 0x7f080060
@@ -3155,6 +3161,7 @@ int id enterAlwaysCollapsed 0x7f0800a4
 int id etAntiDetection 0x7f0800a5
 int id etHold 0x7f0800a6
 int id etInterval 0x7f0800a7
+int id etProfileName 0x7f0801d5
 int id etStartDelay 0x7f0800a8
 int id exitUntilCollapsed 0x7f0800a9
 int id expand_activities_button 0x7f0800aa
@@ -3211,6 +3218,7 @@ int id line1 0x7f0800dc
 int id line3 0x7f0800dd
 int id linear 0x7f0800de
 int id listMode 0x7f0800df
+int id listProfiles 0x7f0801d6
 int id list_item 0x7f0800e0
 int id m3_side_sheet 0x7f0800e1
 int id marquee 0x7f0800e2
@@ -3434,7 +3442,7 @@ int id transition_scene_layoutid_cache 0x7f0801bb
 int id transition_transform 0x7f0801bc
 int id triangle 0x7f0801bd
 int id tvDotId 0x7f0801be
-int id tvInfo 0x7f0801bf
+int id tvProfileName 0x7f0801d7
 int id unchecked 0x7f0801c0
 int id uniform 0x7f0801c1
 int id unlabeled 0x7f0801c2
@@ -3587,6 +3595,7 @@ int layout design_text_input_end_icon 0x7f0b002c
 int layout design_text_input_start_icon 0x7f0b002d
 int layout ime_base_split_test_activity 0x7f0b002e
 int layout ime_secondary_split_test_activity 0x7f0b002f
+int layout item_profile 0x7f0b0071
 int layout m3_alert_dialog 0x7f0b0030
 int layout m3_alert_dialog_actions 0x7f0b0031
 int layout m3_alert_dialog_title 0x7f0b0032
@@ -3644,6 +3653,8 @@ int layout notification_template_custom_big 0x7f0b0065
 int layout notification_template_icon_group 0x7f0b0066
 int layout notification_template_part_chronometer 0x7f0b0067
 int layout notification_template_part_time 0x7f0b0068
+int layout overlay_profile_list 0x7f0b006f
+int layout overlay_save_profile 0x7f0b0070
 int layout select_dialog_item_material 0x7f0b0069
 int layout select_dialog_multichoice_material 0x7f0b006a
 int layout select_dialog_singlechoice_material 0x7f0b006b

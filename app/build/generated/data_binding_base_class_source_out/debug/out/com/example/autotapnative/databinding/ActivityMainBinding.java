@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewbinding.ViewBinding;
@@ -29,17 +28,13 @@ public final class ActivityMainBinding implements ViewBinding {
   @NonNull
   public final Button btnStartOverlay;
 
-  @NonNull
-  public final TextView tvInfo;
-
   private ActivityMainBinding(@NonNull LinearLayout rootView,
       @NonNull Button btnAccessibilitySetting, @NonNull Button btnOverlayPermission,
-      @NonNull Button btnStartOverlay, @NonNull TextView tvInfo) {
+      @NonNull Button btnStartOverlay) {
     this.rootView = rootView;
     this.btnAccessibilitySetting = btnAccessibilitySetting;
     this.btnOverlayPermission = btnOverlayPermission;
     this.btnStartOverlay = btnStartOverlay;
-    this.tvInfo = tvInfo;
   }
 
   @Override
@@ -87,14 +82,8 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.tvInfo;
-      TextView tvInfo = ViewBindings.findChildViewById(rootView, id);
-      if (tvInfo == null) {
-        break missingId;
-      }
-
       return new ActivityMainBinding((LinearLayout) rootView, btnAccessibilitySetting,
-          btnOverlayPermission, btnStartOverlay, tvInfo);
+          btnOverlayPermission, btnStartOverlay);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

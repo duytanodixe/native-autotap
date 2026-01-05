@@ -4,7 +4,7 @@
             "outputFile": "com.example.autotapnative.app-mergeDebugResources-29:/values-tr/values-tr.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\duyta\\.gradle\\caches\\9.0-milestone-1\\transforms\\78f992041a640e8e4fbd20827e3ac1f2\\transformed\\core-1.12.0\\res\\values-tr\\values-tr.xml",
+                    "source": "C:\\Users\\ADMIN\\.gradle\\caches\\9.0-milestone-1\\transforms\\9ea2febe8ba1a05056cfd189153e6097\\transformed\\core-1.12.0\\res\\values-tr\\values-tr.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",
@@ -21,7 +21,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\duyta\\.gradle\\caches\\9.0-milestone-1\\transforms\\8b369e50ea02ce86b7d468f841d3f625\\transformed\\material-1.11.0\\res\\values-tr\\values-tr.xml",
+                    "source": "C:\\Users\\ADMIN\\.gradle\\caches\\9.0-milestone-1\\transforms\\8237230c2025f7caab4532dec99c1a8c\\transformed\\material-1.11.0\\res\\values-tr\\values-tr.xml",
                     "from": {
                         "startLines": "2,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -40,7 +40,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\duyta\\.gradle\\caches\\9.0-milestone-1\\transforms\\aee0ce5c7befbe4bd0f9f7cf840d06fe\\transformed\\appcompat-1.6.1\\res\\values-tr\\values-tr.xml",
+                    "source": "C:\\Users\\ADMIN\\.gradle\\caches\\9.0-milestone-1\\transforms\\d0d8e61ee391373da925cae0d8be1da4\\transformed\\appcompat-1.6.1\\res\\values-tr\\values-tr.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",

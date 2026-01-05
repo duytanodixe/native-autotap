@@ -1,5 +1,5 @@
 package com.example.autotapnative
-
+import android.view.View
 data class Dot(
     val id: String,
     var actionIntervalTime: Long,
@@ -7,5 +7,6 @@ data class Dot(
     var antiDetection: Float,
     var startDelay: Long,
     var x: Float,
-    var y: Float
+    var y: Float,
+
 )

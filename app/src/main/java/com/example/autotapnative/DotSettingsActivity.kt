@@ -12,8 +12,11 @@ class DotSettingsActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_DOT_ID = "extra_dot_id"
         const val EXTRA_PROFILE_NAME = "extra_profile_name"
-        private const val ACTION_REFRESH_ALL = "com.example.autotapnative.REFRESH_ALL"
+
+        const val ACTION_REFRESH_ALL = "com.example.autotapnative.REFRESH_ALL"
+        const val ACTION_SHOW_OVERLAY = "com.example.autotapnative.SHOW_OVERLAY"
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,15 +61,24 @@ class DotSettingsActivity : AppCompatActivity() {
 
                 ProfileManager.saveProfiles(this, allProfiles)
 
-                // Manually create the intent to break the compile-time dependency
+                // 🔁 refresh dots nếu cần
                 val refreshIntent = Intent(ACTION_REFRESH_ALL).setPackage(packageName)
                 sendBroadcast(refreshIntent)
 
+                // ✅ MỞ LẠI OVERLAY
+                val showOverlayIntent = Intent(this, OverlayService::class.java).apply {
+                    action = OverlayService.ACTION_SHOW_OVERLAY
+                }
+                startService(showOverlayIntent)
+
                 Toast.makeText(this, "Đã lưu cài đặt cho dot ${dot.id}", Toast.LENGTH_SHORT).show()
                 finish()
+
             } catch (e: Exception) {
                 Toast.makeText(this, "Giá trị không hợp lệ", Toast.LENGTH_SHORT).show()
             }
         }
+
+
     }
 }

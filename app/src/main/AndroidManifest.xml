@@ -19,7 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".DotSettingsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AutoTapNative" />
         <service
             android:name=".AutoTapAccessibilityService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"

@@ -41,5 +41,11 @@
         android:layout_marginTop="4dp"
         android:background="@android:color/transparent"
         android:src="@android:drawable/ic_menu_save" />
+    <ImageButton
+        android:id="@+id/btnChooseProfile"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@android:color/transparent"
+        android:src="@android:drawable/ic_menu_agenda" />
 
 </LinearLayout>

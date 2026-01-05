@@ -3,33 +3,70 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:background="#FFD600"
+    android:gravity="center"
+    android:padding="20dp">
 
-    <TextView
-        android:id="@+id/tvInfo"
+    <!-- CARD CHÍNH -->
+    <LinearLayout
         android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-        android:paddingBottom="16dp"
-        android:textSize="16sp" />
+        android:layout_height="match_parent"
+        android:background="#121826"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="24dp">
 
-    <Button
-        android:id="@+id/btnOverlayPermission"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Cấp quyền Overlay" />
+        <!-- NÚT START -->
+        <Button
+            android:id="@+id/btnStartOverlay"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:text="START\nTap here to start"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:lineSpacingExtra="6dp"
+            android:gravity="center"
+            android:background="@drawable/bg_circle_start"
+            android:textAllCaps="false"
+            android:layout_marginBottom="36dp"/>
 
-    <Button
-        android:id="@+id/btnAccessibilitySetting"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Mở cài đặt Trợ năng" />
+        <!-- 2 NÚT DƯỚI -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/btnStartOverlay"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Start Overlay Toolbar" />
+            <Button
+                android:id="@+id/btnOverlayPermission"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginEnd="12dp"
+                android:text="Overlay Permission"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:background="@drawable/bg_card_blue"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/btnAccessibilitySetting"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="12dp"
+                android:text="Accessibility Setting"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:background="@drawable/bg_card_red"
+                android:textAllCaps="false"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

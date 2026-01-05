@@ -4,7 +4,7 @@
             "outputFile": "com.example.autotapnative.app-mergeDebugResources-29:/values-v16/values-v16.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\duyta\\.gradle\\caches\\9.0-milestone-1\\transforms\\aee0ce5c7befbe4bd0f9f7cf840d06fe\\transformed\\appcompat-1.6.1\\res\\values-v16\\values-v16.xml",
+                    "source": "C:\\Users\\ADMIN\\.gradle\\caches\\9.0-milestone-1\\transforms\\d0d8e61ee391373da925cae0d8be1da4\\transformed\\appcompat-1.6.1\\res\\values-v16\\values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -23,7 +23,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\duyta\\.gradle\\caches\\9.0-milestone-1\\transforms\\78f992041a640e8e4fbd20827e3ac1f2\\transformed\\core-1.12.0\\res\\values-v16\\values-v16.xml",
+                    "source": "C:\\Users\\ADMIN\\.gradle\\caches\\9.0-milestone-1\\transforms\\9ea2febe8ba1a05056cfd189153e6097\\transformed\\core-1.12.0\\res\\values-v16\\values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

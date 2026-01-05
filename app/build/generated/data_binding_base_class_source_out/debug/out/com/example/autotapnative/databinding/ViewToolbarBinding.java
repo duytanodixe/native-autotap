@@ -24,6 +24,9 @@ public final class ViewToolbarBinding implements ViewBinding {
   public final ImageButton btnAddDot;
 
   @NonNull
+  public final ImageButton btnChooseProfile;
+
+  @NonNull
   public final ImageButton btnPlayPause;
 
   @NonNull
@@ -36,10 +39,12 @@ public final class ViewToolbarBinding implements ViewBinding {
   public final Spinner spinnerProfiles;
 
   private ViewToolbarBinding(@NonNull LinearLayout rootView, @NonNull ImageButton btnAddDot,
-      @NonNull ImageButton btnPlayPause, @NonNull ImageButton btnRemoveDot,
-      @NonNull ImageButton btnSaveProfile, @NonNull Spinner spinnerProfiles) {
+      @NonNull ImageButton btnChooseProfile, @NonNull ImageButton btnPlayPause,
+      @NonNull ImageButton btnRemoveDot, @NonNull ImageButton btnSaveProfile,
+      @NonNull Spinner spinnerProfiles) {
     this.rootView = rootView;
     this.btnAddDot = btnAddDot;
+    this.btnChooseProfile = btnChooseProfile;
     this.btnPlayPause = btnPlayPause;
     this.btnRemoveDot = btnRemoveDot;
     this.btnSaveProfile = btnSaveProfile;
@@ -79,6 +84,12 @@ public final class ViewToolbarBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.btnChooseProfile;
+      ImageButton btnChooseProfile = ViewBindings.findChildViewById(rootView, id);
+      if (btnChooseProfile == null) {
+        break missingId;
+      }
+
       id = R.id.btnPlayPause;
       ImageButton btnPlayPause = ViewBindings.findChildViewById(rootView, id);
       if (btnPlayPause == null) {
@@ -103,8 +114,8 @@ public final class ViewToolbarBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ViewToolbarBinding((LinearLayout) rootView, btnAddDot, btnPlayPause, btnRemoveDot,
-          btnSaveProfile, spinnerProfiles);
+      return new ViewToolbarBinding((LinearLayout) rootView, btnAddDot, btnChooseProfile,
+          btnPlayPause, btnRemoveDot, btnSaveProfile, spinnerProfiles);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

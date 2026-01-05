@@ -1,18 +1,34 @@
 [
     {
-        "merged": "com.example.autotapnative.app-mergeDebugResources-30:/layout/view_toolbar.xml",
-        "source": "com.example.autotapnative.app-main-33:/layout/view_toolbar.xml"
+        "merged": "C:\\Users\\ADMIN\\.gradle\\daemon\\9.0-milestone-1\\com.example.autotapnative.app-mergeDebugResources-30:\\layout\\overlay_save_profile.xml",
+        "source": "C:\\Users\\ADMIN\\.gradle\\daemon\\9.0-milestone-1\\com.example.autotapnative.app-main-33:\\layout\\overlay_save_profile.xml"
     },
     {
-        "merged": "com.example.autotapnative.app-mergeDebugResources-30:/layout/activity_dot_settings.xml",
-        "source": "com.example.autotapnative.app-main-33:/layout/activity_dot_settings.xml"
+        "merged": "com.example.autotapnative.app-mergeDebugResources-30:/layout/item_profile.xml",
+        "source": "com.example.autotapnative.app-main-33:/layout/item_profile.xml"
     },
     {
-        "merged": "com.example.autotapnative.app-mergeDebugResources-30:/layout/view_dot.xml",
-        "source": "com.example.autotapnative.app-main-33:/layout/view_dot.xml"
+        "merged": "C:\\Users\\ADMIN\\.gradle\\daemon\\9.0-milestone-1\\com.example.autotapnative.app-mergeDebugResources-30:\\layout\\overlay_profile_list.xml",
+        "source": "C:\\Users\\ADMIN\\.gradle\\daemon\\9.0-milestone-1\\com.example.autotapnative.app-main-33:\\layout\\overlay_profile_list.xml"
     },
     {
-        "merged": "com.example.autotapnative.app-mergeDebugResources-30:/layout/activity_main.xml",
-        "source": "com.example.autotapnative.app-main-33:/layout/activity_main.xml"
+        "merged": "C:\\Users\\ADMIN\\.gradle\\daemon\\9.0-milestone-1\\com.example.autotapnative.app-mergeDebugResources-30:\\layout\\view_dot.xml",
+        "source": "C:\\Users\\ADMIN\\.gradle\\daemon\\9.0-milestone-1\\com.example.autotapnative.app-main-33:\\layout\\view_dot.xml"
+    },
+    {
+        "merged": "C:\\Users\\ADMIN\\.gradle\\daemon\\9.0-milestone-1\\com.example.autotapnative.app-mergeDebugResources-30:\\layout\\activity_main.xml",
+        "source": "C:\\Users\\ADMIN\\.gradle\\daemon\\9.0-milestone-1\\com.example.autotapnative.app-main-33:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\ADMIN\\.gradle\\daemon\\9.0-milestone-1\\com.example.autotapnative.app-mergeDebugResources-30:\\layout\\activity_dot_settings.xml",
+        "source": "C:\\Users\\ADMIN\\.gradle\\daemon\\9.0-milestone-1\\com.example.autotapnative.app-main-33:\\layout\\activity_dot_settings.xml"
+    },
+    {
+        "merged": "com.example.autotapnative.app-mergeDebugResources-30:/layout/overlay_save_profile.xml",
+        "source": "com.example.autotapnative.app-main-33:/layout/overlay_save_profile.xml"
+    },
+    {
+        "merged": "C:\\Users\\ADMIN\\.gradle\\daemon\\9.0-milestone-1\\com.example.autotapnative.app-mergeDebugResources-30:\\layout\\view_toolbar.xml",
+        "source": "C:\\Users\\ADMIN\\.gradle\\daemon\\9.0-milestone-1\\com.example.autotapnative.app-main-33:\\layout\\view_toolbar.xml"
     }
 ]

@@ -3,10 +3,10 @@ package com.example.autotapnative
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.GestureDescription
 import android.graphics.Path
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
-import java.util.Timer
-import java.util.TimerTask
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
@@ -18,89 +18,106 @@ class AutoTapAccessibilityService : AccessibilityService() {
         var instance: AutoTapAccessibilityService? = null
     }
 
-    private val timers = mutableMapOf<String, Timer>()
+    private val handlers = mutableMapOf<String, Handler>()
+    private val runnables = mutableMapOf<String, Runnable>()
+
+    private val mainHandler = Handler(Looper.getMainLooper())
+    private var gestureBusy = false
 
     override fun onServiceConnected() {
         super.onServiceConnected()
         instance = this
-        Log.d("AutoTapService", "Service connected and instance set.")
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         stopAutoTap()
         instance = null
-        Log.d("AutoTapService", "Service destroyed and instance cleared.")
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {}
-
     override fun onInterrupt() {
         stopAutoTap()
     }
 
+    // ===== START =====
     fun startAutoTap(dots: List<Dot>) {
-        stopAutoTap() 
-        Log.d("AutoTapService", "Starting auto-tap for ${dots.size} dots.")
+        stopAutoTap()
 
-        if (dots.isEmpty()) {
-            Log.w("AutoTapService", "Dot list is empty. Nothing to tap.")
-            return
-        }
+        dots.forEach { dot ->
+            val handler = Handler(Looper.getMainLooper())
 
-        for (dot in dots) {
-            if (dot.actionIntervalTime <= 0) {
-                Log.w("AutoTapService", "Skipping dot ${dot.id} due to invalid interval: ${dot.actionIntervalTime}")
-                continue
-            }
-            val timer = Timer()
-            timers[dot.id] = timer
-            timer.schedule(object : TimerTask() {
+            val runnable = object : Runnable {
                 override fun run() {
-                    performAutoTap(dot)
+                    if (!gestureBusy) {
+                        gestureBusy = true
+                        performAutoTap(dot)
+                    }
+                    handler.postDelayed(
+                        this,
+                        dot.actionIntervalTime.coerceAtLeast(50)
+                    )
                 }
-            }, dot.startDelay, dot.actionIntervalTime)
+            }
+
+            handlers[dot.id] = handler
+            runnables[dot.id] = runnable
+
+            // startDelay RIÊNG
+            handler.postDelayed(runnable, dot.startDelay)
         }
     }
 
+    // ===== STOP =====
     fun stopAutoTap() {
-        if (timers.isEmpty()) return
-        timers.values.forEach { it.cancel() }
-        timers.clear()
-        Log.d("AutoTapService", "Stopped auto-tap.")
+        handlers.values.forEach {
+            it.removeCallbacksAndMessages(null)
+        }
+        handlers.clear()
+        runnables.clear()
+        gestureBusy = false
     }
 
+    // ===== TAP =====
     private fun performAutoTap(dot: Dot) {
         val radius = dot.antiDetection.toDouble()
-        var jitterX = 0.0
-        var jitterY = 0.0
+        var dx = 0.0
+        var dy = 0.0
 
         if (radius > 0) {
-            val t = 2 * Math.PI * Random.nextDouble()
+            val t = Random.nextDouble() * 2 * Math.PI
             val r = radius * sqrt(Random.nextDouble())
-            jitterX = r * cos(t)
-            jitterY = r * sin(t)
+            dx = r * cos(t)
+            dy = r * sin(t)
         }
 
-        val x = dot.x + jitterX.toFloat()
-        val y = dot.y + jitterY.toFloat()
-
-        Log.d("AutoTapService", "Tapping at ($x, $y) for dot ${dot.id}")
-
         val path = Path().apply {
-            moveTo(x, y)
+            moveTo(dot.x + dx.toFloat(), dot.y + dy.toFloat())
         }
 
         val gesture = GestureDescription.Builder()
             .addStroke(
                 GestureDescription.StrokeDescription(
                     path,
-                    0L,
-                    dot.holdTime
+                    0,
+                    dot.holdTime.coerceAtLeast(20)
                 )
             )
             .build()
 
-        dispatchGesture(gesture, null, null)
+        dispatchGesture(
+            gesture,
+            object : GestureResultCallback() {
+                override fun onCompleted(gestureDescription: GestureDescription?) {
+                    gestureBusy = false
+                }
+
+                override fun onCancelled(gestureDescription: GestureDescription?) {
+                    gestureBusy = false
+                }
+            },
+            null
+        )
     }
 }
+
+

@@ -1,25 +1,36 @@
 R_DEF: Internal format may change without notice
 local
+drawable bg_card_blue
+drawable bg_card_red
+drawable bg_circle_start
 drawable bg_toolbar
 id btnAccessibilitySetting
 id btnAddDot
+id btnCancel
+id btnChooseProfile
 id btnDotSettings
 id btnOverlayPermission
 id btnPlayPause
 id btnRemoveDot
+id btnSave
 id btnSaveDot
 id btnSaveProfile
 id btnStartOverlay
 id etAntiDetection
 id etHold
 id etInterval
+id etProfileName
 id etStartDelay
+id listProfiles
 id spinnerProfiles
 id tvDotId
-id tvInfo
+id tvProfileName
 id viewCrosshair
 layout activity_dot_settings
 layout activity_main
+layout item_profile
+layout overlay_profile_list
+layout overlay_save_profile
 layout view_dot
 layout view_toolbar
 string app_name
