@@ -39,7 +39,7 @@ class AutoTapAccessibilityService : AccessibilityService() {
         stopAutoTap()
     }
 
-    // ===== START =====
+
     fun startAutoTap(dots: List<Dot>) {
         stopAutoTap()
 
@@ -67,7 +67,7 @@ class AutoTapAccessibilityService : AccessibilityService() {
         }
     }
 
-    // ===== STOP =====
+
     fun stopAutoTap() {
         handlers.values.forEach {
             it.removeCallbacksAndMessages(null)
@@ -77,7 +77,7 @@ class AutoTapAccessibilityService : AccessibilityService() {
         gestureBusy = false
     }
 
-    // ===== TAP =====
+
     private fun performAutoTap(dot: Dot) {
         val radius = dot.antiDetection.toDouble()
         var dx = 0.0

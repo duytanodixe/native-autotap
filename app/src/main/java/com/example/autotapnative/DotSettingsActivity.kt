@@ -61,11 +61,11 @@ class DotSettingsActivity : AppCompatActivity() {
 
                 ProfileManager.saveProfiles(this, allProfiles)
 
-                // 🔁 refresh dots nếu cần
+
                 val refreshIntent = Intent(ACTION_REFRESH_ALL).setPackage(packageName)
                 sendBroadcast(refreshIntent)
 
-                // ✅ MỞ LẠI OVERLAY
+
                 val showOverlayIntent = Intent(this, OverlayService::class.java).apply {
                     action = OverlayService.ACTION_SHOW_OVERLAY
                 }

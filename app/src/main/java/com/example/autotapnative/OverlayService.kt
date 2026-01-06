@@ -192,7 +192,7 @@ class OverlayService : Service() {
 
         params.gravity = Gravity.TOP or Gravity.START
 
-        // ⚠️ params.x/y là TOP-LEFT
+
         params.x = dot.x.toInt()
         params.y = dot.y.toInt()
 
@@ -241,13 +241,13 @@ class OverlayService : Service() {
 
         view.findViewById<ImageButton>(R.id.btnDotSettings).setOnClickListener {
 
-            // 1️⃣ TẠM TẮT OVERLAY
+
             val hideIntent = Intent(this, OverlayService::class.java).apply {
                 action = ACTION_HIDE_OVERLAY
             }
             startService(hideIntent)
 
-            // 2️⃣ MỞ DOT SETTINGS
+
             val intent = Intent(this, DotSettingsActivity::class.java).apply {
                 putExtra(DotSettingsActivity.EXTRA_DOT_ID, dot.id)
                 putExtra(DotSettingsActivity.EXTRA_PROFILE_NAME, activeProfile?.name)
